@@ -29,3 +29,30 @@ Codes in lgb folder contains the work done during the competition.
 * Mole_Model: General molecular level feature engineering and outputs datasets that are used in the later modeling.
 * Mole_Type_Model: Merges generated datasets from Feature_Explore_Data_Gen and Mole_Model. Creates lgb models for different types of coupling.
 I also will also try reproducing top solutions with sequence models. Code will be uploaded in the future. Special thanks to [Andres Torrubia](https://www.kaggle.com/antorsae).
+
+# Feature Engineering
+Thanks to the competition host, as far as I can remember, we are provided with around one million rows of data. And the data is fairly clean. Therefore during the competition, I didn't do much data cleaning. Since I had no experience with neural network especially sequence models during that time, I decided to focus on feature engineering.
+
+The inspiration of feature engineering comes from domain knowledge. First inspiration comes after watching some [online course](https://www.khanacademy.org/science/organic-chemistry/spectroscopy-jay/proton-nmr/v/coupling-constant). I got the idea that the coupling constant depends on the structure of the molecule. For example, the geometry of the molecule and types of atoms that atom_0 and atom_1 are connected to. Second inspiration is that I realized the number in the type of coupling (e.g. '2' in '2JHC') stands for the number of bonds in between. 
+
+Based on two points above, I performed feature engineering for different types. Coupling types with the same number share a lot of features. For different coupling types, the aim of feature engineering is to start from the provided atoms atom_0 and atom_1, and try figuring out the structure of the molecule. This involves understanding what type of atoms atom_0 and atom_1 are connected, the angle and distance between different atoms, mulliken charge and bonding information on each atom.
+
+# Modeling
+Models are created for each type of coupling. In my experience, lgb model seemed to be the best choice due to its fast speed. Since we have a large amount of data and limited time, the number of columns have to be limited. My training sets have around 120 columns. 40 of them are molecular level features used in every coupling type and the other 80 are features specific to different coupling type. Features are selected by iteratively adding a feature into the feature subset which gives the best result in each iteration.
+
+Stacking is used during the modeling. The coupling constant has 4 components given in scalar_coupling_contributions.csv (only for training set). Models are first trained to predict components. Then the component predictions are used as the secondary features, together with the other 120 features, to predict the final coupling constant.
+
+# What works
+* Domain knowledge and feature engineering
+* Stacking
+* Hyperparameter tuning (More cross-validation folds, 'huber' loss)
+* Blending
+
+# What doesn't work
+* Fail to learn tools, packages or libraries commonly used in computational chemistry
+* xgboost
+* Fully connected neural network
+
+# Things to improve
+* Multiprocessing and other techniques to deal with large dataset.
+* Sequence model, transformer model.
