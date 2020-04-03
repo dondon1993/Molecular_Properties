@@ -28,6 +28,7 @@ Codes in lgb folder contains the work done during the competition.
 * Feature_Explore_Data_Gen: Couping type specific feature engineering and also outputs the additional datasets that are used in the later modeling.
 * Mole_Model: General molecular level feature engineering and outputs datasets that are used in the later modeling.
 * Mole_Type_Model: Merges generated datasets from Feature_Explore_Data_Gen and Mole_Model. Creates lgb models for different types of coupling.
+
 I also will also try reproducing top solutions with sequence models. Code will be uploaded in the future. Special thanks to [Andres Torrubia](https://www.kaggle.com/antorsae).
 
 # Feature Engineering
